@@ -1,9 +1,3 @@
-Of course. A great README is the front door to your project. It's your chance to impress a recruiter in 30 seconds. It should be clean, clear, professional, and tell a story about what you built and what skills you've proven.
-
-Here is a template for a high-quality GitHub README. You can copy and paste this directly into a `README.md` file in your project's root directory.
-
----
-
 # Remote Job Market Analyzer & Reporter
 
 ![Project Status](https://img.shields.io/badge/status-complete-brightgreen)![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)![Framework](https://img.shields.io/badge/framework-Flask-black.svg)
