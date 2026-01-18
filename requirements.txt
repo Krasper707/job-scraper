@@ -1,0 +1,11 @@
+requests 
+beautifulsoup4 
+pandas
+lxml
+selenium
+webdriver-manager
+flask
+matplotlib 
+seaborn 
+openai
+fpdf2

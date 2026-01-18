@@ -1,0 +1,95 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Job Report Generator</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
+        h1 { text-align: center; color: #333; }
+        form { display: flex; flex-direction: column; }
+        select, button { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        .loader { display: none; margin: 20px auto; border: 8px solid #f3f3f3; border-radius: 50%; border-top: 8px solid #3498db; width: 60px; height: 60px; animation: spin 1.5s linear infinite; }
+        .loading-container { text-align: center; }
+        .flash-message { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <h1>Job Report Generator</h1>
+    <p>Select a job category to scrape from RemoteOK and generate a PDF hiring report.</p>
+
+    <div id="flash-message-container"></div>
+
+    <!-- The form no longer needs an action or method attribute -->
+    <form id="job-form">
+        <label for="job-type-select"><b>Choose a Job Category:</b></label>
+        <select name="job_type" id="job-type-select">
+            {% for category in job_categories %}
+                <option value="{{ category }}">{{ category.title() }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Generate Report</button>
+    </form>
+
+    <div class="loading-container">
+        <div id="loader" class="loader"></div>
+        <p id="loading-text" style="display:none;">Scraping jobs and generating your report... This may take a minute.</p>
+    </div>
+
+    <script>
+        document.getElementById('job-form').addEventListener('submit', function(event) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            const form = event.target;
+            const select = form.querySelector('select');
+            const button = form.querySelector('button');
+            const loader = document.getElementById('loader');
+            const loadingText = document.getElementById('loading-text');
+            const flashContainer = document.getElementById('flash-message-container');
+
+            // --- UI changes to show loading state ---
+            loader.style.display = 'block';
+            loadingText.style.display = 'block';
+            button.disabled = true;
+            button.innerText = 'Working...';
+            flashContainer.innerHTML = ''; // Clear previous error messages
+
+            // --- Use the Fetch API to send data to the backend ---
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ job_type: select.value })
+            })
+            .then(response => response.json()) // Parse the JSON response from the server
+            .then(data => {
+                if (data.status === 'success') {
+                    // If successful, trigger the download via the new /download route
+                    window.location.href = '/download/' + data.filename;
+                } else {
+                    // If there's an error, display the message from the server
+                    flashContainer.innerHTML = `<div class="flash-message">${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                // Handle network errors
+                console.error('Error:', error);
+                flashContainer.innerHTML = `<div class="flash-message">A network error occurred. Please try again.</div>`;
+            })
+            .finally(() => {
+                // --- ALWAYS run this code, whether success or failure ---
+                // Reset the UI to its original state
+                loader.style.display = 'none';
+                loadingText.style.display = 'none';
+                button.disabled = false;
+                button.innerText = 'Generate Report';
+            });
+        });
+    </script>
+</body>
+</html>
