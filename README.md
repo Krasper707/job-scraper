@@ -21,6 +21,10 @@
 <img src="assets/app.gif" width="700" align='center'/>
 </p>
 
+<p align="center">
+<img src="assets/dashboard.gif" width="700" align='center'/>
+</p>
+
 ---
 
 ## 🛠️ Tech Stack & Key Features
