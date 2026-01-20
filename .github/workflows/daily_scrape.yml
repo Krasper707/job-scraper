@@ -10,8 +10,12 @@ on:
 jobs:
   scrape-and-commit:
     runs-on: ubuntu-latest
-  permissions:
-    contents: write
+
+    # <<< THIS IS THE FIX >>>
+    # Grant the job write permissions to the repository's contents.
+    # This is required for the git-auto-commit-action to push changes.
+    permissions:
+      contents: write
 
     steps:
       - name: Check out repository
@@ -32,8 +36,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # <<< THIS IS THE NEW STEP >>>
-      # Create the data directory so the SQLite database can be created inside it.
       - name: Create data directory
         run: mkdir -p data
 
