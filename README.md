@@ -16,6 +16,11 @@
 
 ### 👉 [**Click here to use the Live Application**](https://huggingface.co/spaces/Karthix1/job-market-analyzer) 👈
 
+
+<p align="center">
+<img src="assets/app.gif" width="700" align='center'/>
+</p>
+
 ---
 
 ## 🛠️ Tech Stack & Key Features
