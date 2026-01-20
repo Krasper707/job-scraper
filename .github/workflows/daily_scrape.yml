@@ -2,58 +2,49 @@
 
 name: Daily Job Scrape
 
-# Controls when the action will run.
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-  # Runs on a schedule (every day at 5:00 UTC)
   schedule:
-    - cron: '0 5 * * *'
+    - cron: "0 5 * * *"
 
 jobs:
   scrape-and-commit:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out your repository's code
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # Use a specific version
+          python-version: "3.11"
 
-      # Step 3: Install Google Chrome (needed for Selenium)
       - name: Install Google Chrome
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      # Step 4: Install your project's dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 5: Run the new scheduled scraper script
-      # We pass the secret API key as an environment variable
+      # <<< THIS IS THE NEW STEP >>>
+      # Create the data directory so the SQLite database can be created inside it.
+      - name: Create data directory
+        run: mkdir -p data
+
       - name: Run the daily scraper
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: python scheduled_scraper.py
 
-      # Step 6: Commit the updated database back to the repository
-      # This action automatically finds changed files and commits them.
       - name: Commit and push if database changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: Update job database with daily scrape"
-          # The user that makes the commit
           commit_user_name: GitHub Actions
           commit_user_email: actions@github.com
           commit_author: GitHub Actions <actions@github.com>
-          # Only commit the database file
           file_pattern: data/jobs.db
