@@ -1,0 +1,67 @@
+<!-- templates/dashboard.html (Corrected Version) -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Job Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 1000px; margin: 40px auto; padding: 20px; background-color: #f9f9f9; }
+        h1, h2 { text-align: center; color: #333; }
+        .chart-container { background-color: #fff; padding: 20px; margin-top: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        img { max-width: 100%; height: auto; display: block; margin: 20px auto; }
+        .controls { text-align: center; margin-bottom: 40px; }
+        label { font-weight: bold; margin-right: 10px; }
+        select, button { padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #007bff; color: white; cursor: pointer; }
+        a { color: #007bff; text-decoration: none; }
+        .nav { text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="nav">
+        <a href="/">← Back to Report Generator</a>
+    </div>
+
+    <h1>Historical Job Dashboard</h1>
+
+    <div class="controls">
+        <form method="GET" action="/dashboard">
+            <label for="category-select">Select a Category to View Trend:</label>
+            <select name="category" id="category-select">
+                {% for category in all_categories %}
+                    <!-- THIS IS THE CORRECTED LINE -->
+                    <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+                        {{ category.title() }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit">Update Trend Chart</button>
+        </form>
+    </div>
+
+    <!-- Check if the chart exists before trying to display it -->
+    {% if trend_chart %}
+    <div class="chart-container">
+        <h2>Job Posting Trend</h2>
+        <!-- The '?' and the 'now' variable prevent the browser from caching the image -->
+        <img src="{{ trend_chart }}?v={{ now }}" alt="Job Posting Trend Line Chart">
+    </div>
+    {% endif %}
+
+    {% if comparison_chart %}
+    <div class="chart-container">
+        <h2>Top Skills Comparison</h2>
+        <img src="{{ comparison_chart }}?v={{ now }}" alt="Top Skills Comparison Bar Chart">
+    </div>
+    {% else %}
+    <div class="chart-container">
+        <h2>Top Skills Comparison</h2>
+        <p>Not enough data to generate a comparison chart for this category yet. Please check back after more data has been collected.</p>
+    </div>
+    {% endif %}
+
+</body>
+</html>

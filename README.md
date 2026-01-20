@@ -1,139 +1,147 @@
-
 # Remote Job Market Analyzer & Reporter
 
-![Status](https://img.shields.io/badge/Status-Maintained-success?style=for-the-badge)
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-2.0%2B-black?style=for-the-badge&logo=flask&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-black?style=flat-square&logo=flask)
+![Docker](https://img.shields.io/badge/Docker-blue?style=flat-square&logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-**Turn chaotic job boards into actionable intelligence.**
-
-A full-stack data application that performs on-demand scraping of live RemoteOK listings, utilizes LLMs to generate executive summaries, and compiles everything into a professional PDF report.
+**A full-stack data application that turns chaotic job boards into actionable intelligence.** This project performs on-demand scraping of live RemoteOK listings, utilizes an LLM to generate executive summaries, and compiles everything into a professional PDF report.
 
 ---
 
-## ⚡ Key Features
+## 🚀 Live Demo & Output
 
-| Feature | Description |
-| :--- | :--- |
-| **🤖 Dynamic Scraping** | Uses **Selenium** to navigate headless browsers, handling infinite scrolls and JavaScript rendering to capture 100% of available listings. |
-| **🧠 AI-Powered Insights** | Integrates with **OpenRouter/Mistral 7B** to read raw job descriptions and generate a human-readable "Executive Summary" of market trends. |
-| **📊 Auto-Visualization** | Automatically cleans data with **Pandas** and generates distribution charts for salaries and top skills using **Matplotlib/Seaborn**. |
-| **📄 PDF Generation** | Compiles charts, summaries, and top company lists into a downloadable, professionally formatted PDF report. |
-| **💾 SQL Persistence** | Stores every scrape in a **SQLite** database for historical tracking and future analysis. |
+**The application is deployed live on Hugging Face Spaces!**
+
+### 👉 [**Click here to use the Live Application**](https://huggingface.co/spaces/Karthix1/job-market-analyzer) 👈
+
+---
+
+## 🛠️ Tech Stack & Key Features
+
+| Tech                        | Role                                                  |
+| :-------------------------- | :---------------------------------------------------- |
+| **Python**                  | Core backend logic.                                   |
+| **Flask**                   | Web server and API endpoint.                          |
+| **Selenium**                | Dynamic, headless browser scraping.                   |
+| **Pandas**                  | Data cleaning, transformation, and analysis.          |
+| **SQLite**                  | Persistent database for historical data.              |
+| **OpenRouter / Mistral 7B** | Generative AI for trend summarization.                |
+| **Matplotlib / Seaborn**    | Data visualization and chart generation.              |
+| **FPDF2**                   | Professional PDF report generation.                   |
+| **Docker**                  | Containerization for portable, consistent deployment. |
+| **GitHub Actions**          | CI/CD for automated daily data collection.            |
 
 ---
 
 ## 🏗️ System Architecture
 
-The application follows a sequential ETL (Extract, Transform, Load) pipeline triggered via a web frontend.
+The application follows an ETL (Extract, Transform, Load) pipeline triggered via a web frontend, with a separate, scheduled CI/CD pipeline for continuous data enrichment.
+
 [![](https://mermaid.ink/img/pako:eNp1U11v2jAU_SuWnzaJIkhIgDxMArJ21UBlkG7SQh8u5DZYc-zIcdQC4b_v5qOaNnWRYvv6nnM_ju0LP-gEecBTA_mRReFOMfoeCzRxPTyxm5tP1RYlHmzBFmAx1eZUscf7-FZC8Yv9wD0ZTx3tvoFHRqQpmqJiszy_rEAottDKGi0lmmsLbcei3LeJd_xztGRrkaMUCne8dRO9CTjss-2BcFh1s4nrkpQoMzbXtsveuRrGHVr2JVotq7rAeIOZtvjw9R3gBl5YCBYqtpAIiiKvQSVQtKZQacfpvK0c1pQHWxpMOmo4jz9svy2FxWZjDwV-7Hiokv80vMFcG0sZ_u3W6bOZAnk6U7vL5Sp-yFFtdGkp-2z9JnU4b7C1rvhquzoI3Xpp0VZaZhmYE4sIU7F1eBvTz-6QOgGrzd-xthYsndl3cY5XYHOprRT7DkKbbb4jmBpEYd7trw5f40L9oqSGpGquEu_R_RIJD0g47PEMTQa1yS81a8ftETM69ICWCT5DKW2tyZVoOaifWmdvTKPL9MiDZ5AFWWWe0IUMBZCkfyBUEZqFLpXlgTtsQvDgwl954Eycvj_03ZHrjceO509HPX7igd93XdcZea7ne87Ucd1rj5-bpIP-ZOAOpmPfG_vOwJsM_B7HRJByq_bVNI_n-hv1mwjr?type=png)](https://mermaid.live/edit#pako:eNp1U11v2jAU_SuWnzaJIkhIgDxMArJ21UBlkG7SQh8u5DZYc-zIcdQC4b_v5qOaNnWRYvv6nnM_ju0LP-gEecBTA_mRReFOMfoeCzRxPTyxm5tP1RYlHmzBFmAx1eZUscf7-FZC8Yv9wD0ZTx3tvoFHRqQpmqJiszy_rEAottDKGi0lmmsLbcei3LeJd_xztGRrkaMUCne8dRO9CTjss-2BcFh1s4nrkpQoMzbXtsveuRrGHVr2JVotq7rAeIOZtvjw9R3gBl5YCBYqtpAIiiKvQSVQtKZQacfpvK0c1pQHWxpMOmo4jz9svy2FxWZjDwV-7Hiokv80vMFcG0sZ_u3W6bOZAnk6U7vL5Sp-yFFtdGkp-2z9JnU4b7C1rvhquzoI3Xpp0VZaZhmYE4sIU7F1eBvTz-6QOgGrzd-xthYsndl3cY5XYHOprRT7DkKbbb4jmBpEYd7trw5f40L9oqSGpGquEu_R_RIJD0g47PEMTQa1yS81a8ftETM69ICWCT5DKW2tyZVoOaifWmdvTKPL9MiDZ5AFWWWe0IUMBZCkfyBUEZqFLpXlgTtsQvDgwl954Eycvj_03ZHrjceO509HPX7igd93XdcZea7ne87Ucd1rj5-bpIP-ZOAOpmPfG_vOwJsM_B7HRJByq_bVNI_n-hv1mwjr)
 
+---
+
+## 🔄 CI/CD: Automated Daily Data Enrichment
+
+This project uses a **GitHub Actions workflow** (`.github/workflows/daily_scrape.yml`) to automatically run the scraper every 24 hours.
+
+- **Trigger:** Runs on a CRON schedule (`0 5 * * *`).
+- **Process:** The workflow spins up a runner, installs Chrome and all dependencies, and runs the `scheduled_scraper.py` script.
+- **Persistence:** Upon completion, the Action commits the updated `jobs.db` file back to the repository, ensuring the live application's data is always growing.
+
+---
+
+## 🐳 Deployment
+
+The application is fully containerized using **Docker** for maximum portability and reproducibility.
+
+- The `Dockerfile` defines the complete environment, installing Python, Google Chrome, and all necessary dependencies.
+- The container is deployed as a **Hugging Face Space**, which provides a persistent filesystem for the SQLite database and handles secret management for the API key.
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-job-scraper/
-├── app.py                 # Flask entry point and route handlers
-├── requirements.txt       # Python dependencies
-├── .env                   # Environment variables (API Keys)
-├── database/
-│   └── jobs.db            # SQLite database (auto-created)
-├── static/
-│   ├── css/               # Stylesheets
-│   └── reports/           # Generated PDFs reside here
-├── templates/
-│   └── index.html         # Frontend interface
-└── utils/
-    ├── scraper.py         # Selenium logic
-    ├── cleaner.py         # Pandas data cleaning
-    ├── db_manager.py      # Database interactions
-    └── reporter.py        # PDF generation & AI integration
+/
+├── .github/workflows/daily_scrape.yml # CI/CD automation workflow
+├── app.py                             # Flask entry point and route handlers
+├── scheduled_scraper.py               # Script for the automated daily run
+├── Dockerfile                         # Defines the container environment
+├── install_chrome.sh                  # Helper script for Docker setup
+├── requirements.txt                   # Python dependencies
+├── .env.example                       # Template for environment variables
+├── README.md                          # You are here!
+|
+├── /data/                             # (Created automatically, gitignored)
+├── /reports/                          # (Created automatically, gitignored)
+├── /static/                           # (Created automatically, gitignored)
+|
+├── /fonts/
+│   └── DejaVuSans.ttf                 # Unicode font for PDF generation
+└── /templates/
+    ├── index.html                     # Main user interface
+    └── dashboard.html                 # Historical data dashboard
 ```
 
 ---
 
-## 🚀 Setup and Installation
+## 🚀 Getting Started Locally
 
 ### Prerequisites
-*   Python 3.9+
-*   Google Chrome (installed on the host machine)
 
-### 1. Clone the Repository
+- Python 3.9+
+- Docker Desktop (for a fully containerized run)
+
+### 1. Clone & Setup
+
 ```bash
 git clone https://github.com/Krasper707/job-scraper.git
 cd job-scraper
-```
-
-### 2. Virtual Environment
-```bash
-# Windows
 python -m venv venv
-venv\Scripts\activate
-
-# macOS/Linux
-python3 -m venv venv
+# Activate the virtual environment (use `venv\Scripts\activate` on Windows)
 source venv/bin/activate
-```
-
-### 3. Install Dependencies
-```bash
 pip install -r requirements.txt
 ```
-*(If `requirements.txt` is missing, install manually: `pip install flask selenium beautifulsoup4 pandas matplotlib seaborn fpdf2 openai python-dotenv webdriver-manager`)*
 
-### 4. Configuration (Security)
-Create a file named `.env` in the root directory. Add your OpenRouter API key here. **Never commit this file to GitHub.**
+### 2. Configure API Key
+
+Create a file named `.env` in the root directory and add your key:
 
 ```ini
-# .env file
-OPENROUTER_API_KEY=sk-or-v1-YOUR_KEY_HERE
+# .env (This file is gitignored for security)
+OPENROUTER_API_KEY="sk-or-v1-YOUR_KEY_HERE"
 ```
 
-### 5. Run the Application
+### 3. Run the Application
+
+You can run it as a standard Flask app or as a Docker container.
+
+**A) Standard Flask Run:**
+
 ```bash
 python app.py
 ```
-Access the application at `http://127.0.0.1:5000`.
 
----
+**B) Docker Run:**
 
-## 🛠️ Troubleshooting
+```bash
+# 1. Build the image
+docker build -t job-analyzer .
 
-**Issue: `ChromeDriver` version mismatch**
-*   **Fix:** This project uses `webdriver-manager` to handle this automatically. If it fails, try running `pip install --upgrade webdriver-manager`.
+# 2. Run the container
+docker run -d -p 5000:7860 --env-file .env -v "$(pwd)/data:/app/data" --name job-analyzer-app job-analyzer
+```
 
-**Issue: Infinite Scroll not working / 0 Jobs found**
-*   **Fix:** RemoteOK changes their DOM structure frequently. Check `scraper.py` and ensure the CSS Selectors match the current website structure.
-
-**Issue: PDF generation fails**
-*   **Fix:** Ensure the `static/reports` directory exists. The script should create it, but permissions can sometimes block write access.
+Access the application at `http://localhost:5000`.
 
 ---
 
 ## 🔮 Future Roadmap
 
-*   [ ] **Dashboard:** Replace static PDF with a live React/Plotly dashboard.
-*   [ ] **Multi-Source:** Add adapters for LinkedIn and Indeed.
-*   [ ] **Celery/Redis:** Move scraping to a background worker to prevent browser timeouts during long scrapes.
-*   [ ] **Email Alerts:** Schedule weekly scrapes and email the PDF automatically.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please open an issue first to discuss the change you wish to make.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
----
-
-## 📝 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+- [ ] **Dashboard Enhancements:** Add more complex visualizations (e.g., skill correlations) using Plotly for interactivity.
+- [ ] **Multi-Source Scraping:** Refactor the scraper into a class-based system to support multiple job boards (e.g., LinkedIn, Indeed).
+- [ ] **Asynchronous Task Queue:** Implement Celery/Redis to move the scraping and reporting process to a background worker, providing a non-blocking UI.
+- [ ] **Email Alerts:** Schedule a weekly job that generates a report for a user-defined category and emails it automatically.

@@ -1,0 +1,26 @@
+# .dockerignore
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Virtual environment and local files
+venv/
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Generated application data (this will be handled by volumes)
+data/
+reports/
+static/
+
+# IDE/Editor folders
+.vscode/
+.idea/
